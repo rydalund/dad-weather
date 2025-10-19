@@ -7,14 +7,12 @@ import {
     StyleSheet,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useSettingsStore } from '@/store/useSettingsStore';
 
-interface Props {
-    unit: 'celsius' | 'fahrenheit';
-    onToggleUnit: () => void;
-}
-
-export default function HamburgerMenu({ unit, onToggleUnit }: Props) {
+export default function HamburgerMenu({}) {
     const [visible, setVisible] = useState(false);
+     const unit = useSettingsStore(state => state.unit);
+  const toggleUnit = useSettingsStore(state => state.toggleUnit);
 
     return (
         <>
@@ -38,7 +36,7 @@ export default function HamburgerMenu({ unit, onToggleUnit }: Props) {
                     <View style={styles.menu}>
                         <Text style={styles.menuTitle}>Settings</Text>
 
-                        <TouchableOpacity onPress={onToggleUnit} style={styles.menuItem}>
+                        <TouchableOpacity onPress={toggleUnit} style={styles.menuItem}>
                             <Text style={styles.menuItemText}>
                                 Change temp to {unit === 'celsius' ? '°F' : '°C'}
                             </Text>

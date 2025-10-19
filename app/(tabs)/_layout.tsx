@@ -24,11 +24,11 @@ export default function TabLayout() {
         <Tabs.Screen
         name="dadJokes"
         options={{
-          tabBarIcon: ({ color }) => <Ionicons name="male" size={24} color={color} style={{ marginTop: 2 }} />,
+          tabBarIcon: ({ color }) => <Ionicons name="male" size={24} color={color} style={{ marginTop: 3 }} />,
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="forecast"
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="partly-sunny" size={24} color={color} />,
         }}
