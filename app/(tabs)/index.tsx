@@ -10,14 +10,19 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import SearchModal from '@/components/SearchModal';
+import HamburgerMenu from '@/components/hamburgerMenu';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 
 export default function Home() {
   const [foo, setFoo] = useState(true); // For design test
   const [modalVisible, setModalVisible] = useState(false);
+  const [unit, setUnit] = useState<'celsius' | 'fahrenheit'>('celsius');
+
+  const toggleUnit = () => {
+    setUnit(prev => (prev === 'celsius' ? 'fahrenheit' : 'celsius'));
+  };
 
   const handleSearch = (city: string) => {
     Alert.alert('Searching for', city);
@@ -28,6 +33,7 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>
       <View style={styles.container}>
+        <HamburgerMenu unit={unit} onToggleUnit={toggleUnit} />
         <StatusBar backgroundColor={BACKGROUND_COLOR} barStyle="light-content" />
         <Text style={styles.title}>DadWeather</Text>
         <Text style={styles.tagline}>Serious forecasts, seriously dad jokes.</Text>

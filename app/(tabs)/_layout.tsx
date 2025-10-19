@@ -21,6 +21,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color}  />,
         }}
       />
+        <Tabs.Screen
+        name="dadJokes"
+        options={{
+          tabBarIcon: ({ color }) => <Ionicons name="male" size={24} color={color} style={{ marginTop: 2 }} />,
+        }}
+      />
       <Tabs.Screen
         name="two"
         options={{
