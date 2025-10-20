@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-type Unit = 'celsius' | 'fahrenheit';
+import { Unit } from '@/constants/unit';
 
 interface SettingsState {
   unit: Unit;
@@ -8,9 +7,9 @@ interface SettingsState {
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
-  unit: 'celsius',
+ unit: Unit.Celsius,
   toggleUnit: () =>
     set((state) => ({
-      unit: state.unit === 'celsius' ? 'fahrenheit' : 'celsius',
+      unit: state.unit === Unit.Celsius ? Unit.Fahrenheit : Unit.Celsius,
     })),
 }));

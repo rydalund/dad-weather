@@ -5,20 +5,43 @@ import {
     Modal,
     Text,
     StyleSheet,
+    TouchableWithoutFeedback,
+    Alert,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSettingsStore } from '@/store/useSettingsStore';
+import { useFavoritesStore } from '@/store/useFavoritesStore';
 
-export default function HamburgerMenu({}) {
+export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);
-     const unit = useSettingsStore(state => state.unit);
-  const toggleUnit = useSettingsStore(state => state.toggleUnit);
+    const unit = useSettingsStore(state => state.unit);
+    const toggleUnit = useSettingsStore(state => state.toggleUnit);
+    const clearFavorites = useFavoritesStore(state => state.clearFavorites);
+
+    const handleClearFavorites = () => {
+        Alert.alert(
+            'Clear Favorites',
+            'Do you really want to remove all favorites?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        clearFavorites();
+                        setVisible(false);
+                    },
+                    style: 'destructive',
+                },
+            ]
+        );
+    };
 
     return (
         <>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => setVisible(true)}
+                activeOpacity={0.7}
             >
                 <Ionicons name="menu" size={28} color="#fff" />
             </TouchableOpacity>
@@ -29,24 +52,29 @@ export default function HamburgerMenu({}) {
                 visible={visible}
                 onRequestClose={() => setVisible(false)}
             >
-                <TouchableOpacity
-                    style={styles.modalOverlay}
-                    onPress={() => setVisible(false)}
-                >
-                    <View style={styles.menu}>
-                        <Text style={styles.menuTitle}>Settings</Text>
+                <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+                    <View style={styles.modalOverlay}>
+                        <TouchableWithoutFeedback>
+                            <View style={styles.menu}>
+                                <Text style={styles.menuTitle}>Settings</Text>
 
-                        <TouchableOpacity onPress={toggleUnit} style={styles.menuItem}>
-                            <Text style={styles.menuItemText}>
-                                Change temp to {unit === 'celsius' ? '°F' : '°C'}
-                            </Text>
-                        </TouchableOpacity>
+                                <TouchableOpacity onPress={toggleUnit} style={styles.menuItem}>
+                                    <Text style={styles.menuItemText}>
+                                        Change temp to {unit === 'celsius' ? '°F' : '°C'}
+                                    </Text>
+                                </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => setVisible(false)} style={styles.menuItem}>
-                            <Text style={[styles.menuItemText, { color: '#aaa' }]}>Close</Text>
-                        </TouchableOpacity>
+                                <TouchableOpacity onPress={handleClearFavorites} style={styles.menuItem}>
+                                    <Text style={styles.menuItemText}>Empty favorites</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => setVisible(false)} style={styles.menuItem}>
+                                    <Text style={[styles.menuItemText, { color: '#aaa' }]}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </View>
-                </TouchableOpacity>
+                </TouchableWithoutFeedback>
             </Modal>
         </>
     );
