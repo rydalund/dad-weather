@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SearchModal from '@/components/SearchModal';
+import SearchModal from '@/components/searchModal';
 import HamburgerMenu from '@/components/hamburgerMenu';
 import { useLocationStore } from '@/store/useLocationStore';
 
@@ -33,6 +33,11 @@ export default function Home() {
     console.log('Search:', city);
     setModalVisible(false);
   };*/
+
+  //For test
+    useEffect(() => {
+    console.log('Location updated:', location);
+  }, [location]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>

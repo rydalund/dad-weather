@@ -11,12 +11,14 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { useFavoritesStore } from '@/store/useFavoritesStore';
+import { useLocationStore } from '@/store/useLocationStore';
 
 export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);
     const unit = useSettingsStore(state => state.unit);
     const toggleUnit = useSettingsStore(state => state.toggleUnit);
     const clearFavorites = useFavoritesStore(state => state.clearFavorites);
+    const clearLocation = useLocationStore(state => state.clearLocation);
 
     const handleClearFavorites = () => {
         Alert.alert(
@@ -28,6 +30,24 @@ export default function HamburgerMenu() {
                     text: 'Yes',
                     onPress: () => {
                         clearFavorites();
+                        setVisible(false);
+                    },
+                    style: 'destructive',
+                },
+            ]
+        );
+    };
+
+    const handleClearLocation = () => {
+        Alert.alert(
+            'Clear Location',
+            'Do you really want to clear current location?',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        clearLocation();
                         setVisible(false);
                     },
                     style: 'destructive',
@@ -62,6 +82,10 @@ export default function HamburgerMenu() {
                                     <Text style={styles.menuItemText}>
                                         Change temp to {unit === 'celsius' ? '°F' : '°C'}
                                     </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={handleClearLocation} style={styles.menuItem}>
+                                    <Text style={styles.menuItemText}>Clear location</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress={handleClearFavorites} style={styles.menuItem}>
