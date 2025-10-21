@@ -12,18 +12,27 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchModal from '@/components/SearchModal';
 import HamburgerMenu from '@/components/hamburgerMenu';
+import { useLocationStore } from '@/store/useLocationStore';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 
-export default function Home() {
-  const [foo, setFoo] = useState(true); // For design test
-  const [modalVisible, setModalVisible] = useState(false);
+/*const mockedWeather = {
+  city: 'Växjö',
+  temperature: 10,
+  description: 'Broken clouds',
+  icon: '04d',
+};*/
 
-  const handleSearch = (city: string) => {
-    Alert.alert('Searching for', city);
+export default function Home() {
+  //const [foo, setFoo] = useState(false); // For design test
+  const [modalVisible, setModalVisible] = useState(false);
+  const { location, setLocation } = useLocationStore();
+  //const hasLocation = location !== null;
+
+  /*const handleSearch = (city: string) => {
+    console.log('Search:', city);
     setModalVisible(false);
-    setFoo(false); // Test
-  };
+  };*/
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>
@@ -33,7 +42,8 @@ export default function Home() {
         <Text style={styles.title}>DadWeather</Text>
         <Text style={styles.tagline}>Serious forecasts, seriously dad jokes.</Text>
 
-        {foo && (
+        {/* Show if location is not choosen */}
+        {!location ? (
           <>
             <Image
               source={require('@/assets/images/app.png')}
@@ -43,7 +53,17 @@ export default function Home() {
               Tap the <Ionicons name="location-sharp" size={18} color="#ccc" /> icon to get your current location, or search a city <Ionicons name="search-sharp" size={18} color="#ccc" />
             </Text>
           </>
+        ) : (
+          <>
+            <Text style={styles.weatherText}>
+              Showing weather for {location.name}, {location.country}
+            </Text>
+            <Text style={styles.weatherText}>
+              Lat: {location.lat} | Lon: {location.lon}
+            </Text>
+          </>
         )}
+
 
         <View style={styles.dadJokeIndex}>
           <View style={styles.divider} />
@@ -60,7 +80,7 @@ export default function Home() {
             <Ionicons name="heart-sharp" style={styles.favoriteIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => console.log('Search pressed')}>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Ionicons name="search-sharp" style={styles.searchIcon} />
           </TouchableOpacity>
 
@@ -72,6 +92,10 @@ export default function Home() {
         <SearchModal
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
+          onSelectLocation={(selectedLocation) => {
+            setLocation(selectedLocation);
+            setModalVisible(false);
+          }}
         />
       </View>
     </SafeAreaView>
@@ -127,6 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flexDirection: 'row',
   },
+    weatherText: {
+    color: '#fff',
+    fontSize: 20,
+    marginTop: 20,
+    textAlign: 'center',
+  },
   divider: {
     height: 1,
     width: '100%',
@@ -153,5 +183,28 @@ const styles = StyleSheet.create({
   favoriteIcon: {
     fontSize: 36,
     color: '#ff0000',
+  },
+  weatherCity: {
+    fontSize: 28,
+    color: '#fff',
+    fontWeight: '600',
+    marginTop: 20,
+  },
+  weatherTemp: {
+    fontSize: 52,
+    color: '#ff6f00',
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  weatherDesc: {
+    fontSize: 18,
+    color: '#ccc',
+    fontStyle: 'italic',
+    marginTop: 5,
+  },
+  weatherIcon: {
+    width: 100,
+    height: 100,
+    marginTop: 15,
   },
 });
