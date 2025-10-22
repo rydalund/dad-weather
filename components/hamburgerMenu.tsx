@@ -12,6 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useSettingsStore } from '@/store/useSettingsStore';
 import { useFavoritesStore } from '@/store/useFavoritesStore';
 import { useLocationStore } from '@/store/useLocationStore';
+import { Unit } from '@/constants/unit';
 
 export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);
@@ -80,7 +81,7 @@ export default function HamburgerMenu() {
 
                                 <TouchableOpacity onPress={toggleUnit} style={styles.menuItem}>
                                     <Text style={styles.menuItemText}>
-                                        Change temp to {unit === 'celsius' ? '°F' : '°C'}
+                                        Change temp to {unit === Unit.Celsius ? '°F (Fahrenheit)' : '°C (Celsius)'}
                                     </Text>
                                 </TouchableOpacity>
 

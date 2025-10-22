@@ -12,7 +12,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SearchModal from '@/components/searchModal';
 import HamburgerMenu from '@/components/hamburgerMenu';
+import WeatherCard from '@/components/weatherCard';
 import { useLocationStore } from '@/store/useLocationStore';
+import { useFavoritesStore } from '@/store/useFavoritesStore';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 
@@ -27,12 +29,18 @@ export default function Home() {
   //const [foo, setFoo] = useState(false); // For design test
   const [modalVisible, setModalVisible] = useState(false);
   const { location, setLocation } = useLocationStore();
+  const { loadFavorites } = useFavoritesStore();
   //const hasLocation = location !== null;
 
   /*const handleSearch = (city: string) => {
     console.log('Search:', city);
     setModalVisible(false);
   };*/
+
+   useEffect(() => {
+    loadFavorites();
+  }, []);
+
 
   //For test
     useEffect(() => {
@@ -58,15 +66,11 @@ export default function Home() {
               Tap the <Ionicons name="location-sharp" size={18} color="#ccc" /> icon to get your current location, or search a city <Ionicons name="search-sharp" size={18} color="#ccc" />
             </Text>
           </>
-        ) : (
-          <>
-            <Text style={styles.weatherText}>
-              Showing weather for {location.name}, {location.country}
-            </Text>
-            <Text style={styles.weatherText}>
-              Lat: {location.lat} | Lon: {location.lon}
-            </Text>
-          </>
+        )  : (
+          <WeatherCard
+            lat={location.lat}
+            lon={location.lon}
+          />
         )}
 
 
