@@ -1,18 +1,18 @@
+import { Unit } from '@/constants/unit';
+import { useFavoritesStore } from '@/stores/useFavoritesStore';
+import { useLocationStore } from '@/stores/useLocationStore';
+import { useSettingsStore } from '@/stores/useSettingsStore';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState } from 'react';
 import {
-    View,
-    TouchableOpacity,
-    Modal,
-    Text,
-    StyleSheet,
-    TouchableWithoutFeedback,
     Alert,
+    Modal,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useSettingsStore } from '@/store/useSettingsStore';
-import { useFavoritesStore } from '@/store/useFavoritesStore';
-import { useLocationStore } from '@/store/useLocationStore';
-import { Unit } from '@/constants/unit';
 
 export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);

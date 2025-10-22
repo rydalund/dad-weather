@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import HamburgerMenu from '@/components/hamburgerMenu';
+import SearchModal from '@/components/searchModal';
+import WeatherCard from '@/components/weatherCard';
+import { useFavoritesStore } from '@/stores/useFavoritesStore';
+import { useLocationStore } from '@/stores/useLocationStore';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  View,
+  Image,
   StatusBar,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
   Alert,
-  Image,
+  ActivityIndicator
 } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import SearchModal from '@/components/searchModal';
-import HamburgerMenu from '@/components/hamburgerMenu';
-import WeatherCard from '@/components/weatherCard';
-import { useLocationStore } from '@/store/useLocationStore';
-import { useFavoritesStore } from '@/store/useFavoritesStore';
+import { getUserLocation } from '@/utils/getUserLocation';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 
@@ -30,6 +32,7 @@ export default function Home() {
   const [modalVisible, setModalVisible] = useState(false);
   const { location, setLocation } = useLocationStore();
   const { loadFavorites } = useFavoritesStore();
+  const [loadingLocation, setLoadingLocation] = useState(false);
   //const hasLocation = location !== null;
 
   /*const handleSearch = (city: string) => {
@@ -37,13 +40,13 @@ export default function Home() {
     setModalVisible(false);
   };*/
 
-   useEffect(() => {
+  useEffect(() => {
     loadFavorites();
   }, []);
 
 
   //For test
-    useEffect(() => {
+  useEffect(() => {
     console.log('Location updated:', location);
   }, [location]);
 
@@ -66,7 +69,7 @@ export default function Home() {
               Tap the <Ionicons name="location-sharp" size={18} color="#ccc" /> icon to get your current location, or search a city <Ionicons name="search-sharp" size={18} color="#ccc" />
             </Text>
           </>
-        )  : (
+        ) : (
           <WeatherCard
             lat={location.lat}
             lon={location.lon}
@@ -93,8 +96,29 @@ export default function Home() {
             <Ionicons name="search-sharp" style={styles.searchIcon} />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => console.log('GPS pressed')}>
-            <Ionicons name="location-sharp" style={styles.searchIcon} />
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                setLoadingLocation(true);
+                const gpsLocation = await getUserLocation();
+                if (gpsLocation) {
+                  setLocation(gpsLocation);
+                } else {
+                  Alert.alert('Location unavailable', 'Could not get your current position.');
+                }
+              } catch (error) {
+                console.error('Failed to get location:', error);
+              } finally {
+                setLoadingLocation(false);
+              }
+            }}
+            disabled={loadingLocation}
+          >
+            {loadingLocation ? (
+              <ActivityIndicator size="large" color="#ff6f00" />
+            ) : (
+              <Ionicons name="location-sharp" style={styles.searchIcon} />
+            )}
           </TouchableOpacity>
         </View>
 
@@ -160,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flexDirection: 'row',
   },
-    weatherText: {
+  weatherText: {
     color: '#fff',
     fontSize: 20,
     marginTop: 20,

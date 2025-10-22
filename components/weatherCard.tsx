@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Constants from 'expo-constants';
 
-import { useFavoritesStore } from '@/store/useFavoritesStore';
-import { useSettingsStore } from '@/store/useSettingsStore';
+import { useFavoritesStore } from '@/stores/useFavoritesStore';
+import { useWeather } from '@/hooks/useWeather';
+import { useSettingsStore } from '@/stores/useSettingsStore';
 import { Unit } from '@/constants/unit';
 
 interface WeatherCardProps {
@@ -20,66 +20,42 @@ interface WeatherCardProps {
 }
 
 const WeatherCard: React.FC<WeatherCardProps> = ({ lat, lon }) => {
-  const [weather, setWeather] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const apiKey = Constants.expoConfig?.extra?.openWeatherApiKey;
-
+  const { data, loading, error } = useWeather(lat, lon);
   const { favorites, addFavorite, removeFavorite } = useFavoritesStore();
   const { unit } = useSettingsStore();
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        setLoading(true);
-        const apiUnit = unit === Unit.Celsius ? 'metric' : 'imperial';
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${apiUnit}&appid=${apiKey}`
-        );
-        const data = await response.json();
-        setWeather(data);
-      } catch (error) {
-        console.error('Fel vid hämtning av väder:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchWeather();
-  }, [lat, lon, unit]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#fff" />;
   }
 
-  if (!weather || !weather.weather || !weather.main) {
-    return <Text style={styles.errorText}>Kunde inte hämta väderdata</Text>;
+  if (error || !data) {
+    return <Text style={styles.errorText}>Error reading weather data</Text>;
   }
 
-  const cityName = weather.name;
   const isFavorite = favorites.some(
-    (fav) => fav.city.toLowerCase() === cityName.toLowerCase()
+    (fav) => fav.city.toLowerCase() === data.name.toLowerCase()
   );
 
   const toggleFavorite = () => {
     const location = {
-      city: cityName,
-      lat: lat,
-      lon: lon,
+      city: data.name,
+      lat,
+      lon,
     };
 
     if (isFavorite) {
-      removeFavorite(cityName);
+      removeFavorite(data.name);
     } else {
       addFavorite(location);
     }
   };
 
-  const iconUrl = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`;
+  const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.cityName}>{cityName}</Text>
+        <Text style={styles.cityName}>{data.name}</Text>
         <TouchableOpacity onPress={toggleFavorite}>
           <Ionicons
             name={isFavorite ? 'heart' : 'heart-outline'}
@@ -93,12 +69,10 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ lat, lon }) => {
       <Image source={{ uri: iconUrl }} style={styles.icon} />
 
       <Text style={styles.temp}>
-        {Math.round(weather.main.temp)}° {unit === Unit.Celsius ? 'C' : 'F'}
+        {Math.round(data.temp)}° {unit === Unit.Celsius ? 'C' : 'F'}
       </Text>
 
-      <Text style={styles.description}>
-        {weather.weather[0].description}
-      </Text>
+      <Text style={styles.description}>{data.description}</Text>
     </View>
   );
 };
