@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getUserLocation } from '@/utils/getUserLocation';
+import { useRouter } from 'expo-router';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 
@@ -33,6 +34,7 @@ export default function Home() {
   const { location, setLocation } = useLocationStore();
   const { loadFavorites } = useFavoritesStore();
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const router = useRouter();
   //const hasLocation = location !== null;
 
   /*const handleSearch = (city: string) => {
@@ -88,7 +90,7 @@ export default function Home() {
         </View>
 
         <View style={styles.iconBar}>
-          <TouchableOpacity onPress={() => console.log('Favorite pressed')}>
+          <TouchableOpacity onPress={() => router.push('/favorites')}>
             <Ionicons name="heart-sharp" style={styles.favoriteIcon} />
           </TouchableOpacity>
 

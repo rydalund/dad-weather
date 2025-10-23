@@ -52,7 +52,17 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+         <Stack.Screen
+          name="favorites"
+          options={{
+            title: 'Favorites',
+            headerStyle: { backgroundColor: '#1e1e1e' },
+            headerTintColor: '#ff6f00',
+            headerTitleStyle: { fontWeight: 'bold' },
+          }}
+        />
       </Stack>
+
     </ThemeProvider>
   );
 }
