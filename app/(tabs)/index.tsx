@@ -13,13 +13,16 @@ import {
   TouchableOpacity,
   View,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Platform
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getUserLocation } from '@/utils/getUserLocation';
 import { useRouter } from 'expo-router';
+import DadJoke from '@/components/DadJoke';
 
 const BACKGROUND_COLOR = '#1e1e1e';
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight || 24;
 
 /*const mockedWeather = {
   city: 'Växjö',
@@ -35,6 +38,7 @@ export default function Home() {
   const { loadFavorites } = useFavoritesStore();
   const [loadingLocation, setLoadingLocation] = useState(false);
   const router = useRouter();
+
   //const hasLocation = location !== null;
 
   /*const handleSearch = (city: string) => {
@@ -57,38 +61,28 @@ export default function Home() {
       <View style={styles.container}>
         <HamburgerMenu />
         <StatusBar backgroundColor={BACKGROUND_COLOR} barStyle="light-content" />
-        <Text style={styles.title}>DadWeather</Text>
-        <Text style={styles.tagline}>Serious forecasts, seriously dad jokes.</Text>
 
-        {/* Show if location is not choosen */}
-        {!location ? (
-          <>
-            <Image
-              source={require('@/assets/images/app.png')}
-              style={styles.appImage}
-            />
-            <Text style={styles.helperText}>
-              Tap the <Ionicons name="location-sharp" size={18} color="#ccc" /> icon to get your current location, or search a city <Ionicons name="search-sharp" size={18} color="#ccc" />
-            </Text>
-          </>
-        ) : (
-          <WeatherCard
-            lat={location.lat}
-            lon={location.lon}
-          />
-        )}
-
-
-        <View style={styles.dadJokeIndex}>
-          <View style={styles.divider} />
-
-          <Text style={styles.tagline}>
-            "I told my wife she should embrace her mistakes. She gave me a hug..."
-          </Text>
-
-          <View style={styles.divider} />
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>DadWeather</Text>
+          <Text style={styles.tagline}>Serious forecasts, seriously dad jokes.</Text>
         </View>
 
+        <View style={styles.content}>
+          {!location ? (
+            <>
+              <Image
+                source={require('@/assets/images/app.png')}
+                style={styles.appImage}
+              />
+              <Text style={styles.helperText}>
+                Tap the <Ionicons name="location-sharp" size={18} color="#ccc" /> icon to get your current location, or search a city <Ionicons name="search-sharp" size={18} color="#ccc" />
+              </Text>
+            </>
+          ) : (
+            <WeatherCard lat={location.lat} lon={location.lon} />
+          )}
+          <DadJoke />
+        </View>
         <View style={styles.iconBar}>
           <TouchableOpacity onPress={() => router.push('/favorites')}>
             <Ionicons name="heart-sharp" style={styles.favoriteIcon} />
@@ -145,8 +139,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
+  },
+  headerContainer: {
+    alignItems: 'center',
+    paddingTop: STATUSBAR_HEIGHT + 20,
+    marginTop: 20,
   },
   title: {
     fontSize: 36,
@@ -167,9 +166,15 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
   appImage: {
     width: 200,
-    height: 300,
+    height: 250,
     resizeMode: 'contain',
     marginTop: 20,
     borderRadius: 20,
@@ -192,19 +197,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center',
   },
-  divider: {
-    height: 1,
-    width: '100%',
-    backgroundColor: '#444',
-    marginVertical: 20,
-  },
-  dadJokeIndex: {
-    marginTop: 40,
-    marginBottom: 50,
-  },
+
   iconBar: {
     position: 'absolute',
-    bottom: 20,
+    bottom: Platform.OS === 'web' ? 20 : 0,
     left: 40,
     right: 40,
     flexDirection: 'row',
