@@ -13,51 +13,68 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     View,
+    Platform
 } from 'react-native';
 
 export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);
-    const router = useRouter(); 
+    const router = useRouter();
     const unit = useSettingsStore(state => state.unit);
     const toggleUnit = useSettingsStore(state => state.toggleUnit);
     const clearFavorites = useFavoritesStore(state => state.clearFavorites);
     const clearLocation = useLocationStore(state => state.clearLocation);
 
     const handleClearFavorites = () => {
-        Alert.alert(
-            'Clear Favorites',
-            'Do you really want to remove all favorites?',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Yes',
-                    onPress: () => {
-                        clearFavorites();
-                        setVisible(false);
-                        router.push('/');
+
+        if (Platform.OS === 'web') {
+            if (window.confirm('Do you really want to remove all favorites?')) {
+                clearFavorites();
+                setVisible(false);
+                router.push('/');
+            }
+        } else {
+            Alert.alert(
+                'Clear Favorites',
+                'Do you really want to remove all favorites?',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                        text: 'Yes',
+                        onPress: () => {
+                            clearFavorites();
+                            setVisible(false);
+                            router.push('/');
+                        },
+                        style: 'destructive',
                     },
-                    style: 'destructive',
-                },
-            ]
-        );
+                ]
+            );
+        }
     };
 
     const handleClearLocation = () => {
-        Alert.alert(
-            'Clear Location',
-            'Do you really want to clear current location?',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Yes',
-                    onPress: () => {
-                        clearLocation();
-                        setVisible(false);
+        if (Platform.OS === 'web') {
+            if (window.confirm('Do you really want to clear current location?')) {
+                clearLocation()
+                setVisible(false);
+                router.push('/');
+            }
+            Alert.alert(
+                'Clear Location',
+                'Do you really want to clear current location?',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                        text: 'Yes',
+                        onPress: () => {
+                            clearLocation();
+                            setVisible(false);
+                        },
+                        style: 'destructive',
                     },
-                    style: 'destructive',
-                },
-            ]
-        );
+                ]
+            );
+        }
     };
 
     return (
