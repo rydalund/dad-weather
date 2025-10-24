@@ -35,7 +35,7 @@ export default function FavoritesScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
       <Text style={styles.title}>Your Favorites: </Text>
 
       {favorites.length === 0 ? (

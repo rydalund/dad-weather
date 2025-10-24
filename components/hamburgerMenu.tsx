@@ -59,6 +59,7 @@ export default function HamburgerMenu() {
                 setVisible(false);
                 router.push('/');
             }
+        } else {
             Alert.alert(
                 'Clear Location',
                 'Do you really want to clear current location?',

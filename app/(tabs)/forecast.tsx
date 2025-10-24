@@ -49,8 +49,8 @@ export default function Forecast() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.header}>
           5-Day Forecast for {locationName || 'Unknown location'}
         </Text>
@@ -78,48 +78,34 @@ export default function Forecast() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    flex: 1,
+    backgroundColor: '#1e1e1e',
+  },
+  scrollContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   center: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#ff6f00',
-    marginBottom: 20,
+    marginVertical: 20,
     textAlign: 'center',
   },
-  card: {
-    backgroundColor: '#2a2a2a',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-  },
-  leftCard: {
-    flex: 1,
-    alignItems: 'flex-start',
-    paddingLeft: 10,
-  },
-  rightCard: {
-    flex: 1,
-    alignItems: 'flex-end',
-    paddingRight: 10,
+  text: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
   },
   date: {
     color: '#fff',
     fontWeight: '600',
     marginBottom: 8,
-  },
-  icon: {
-    width: 60,
-    height: 60,
   },
   temp: {
     color: '#ff6f00',
@@ -132,9 +118,27 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     textTransform: 'capitalize',
   },
-  text: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 16,
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#2a2a2a',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  leftCard: {
+    flex: 1,
+    alignItems: 'flex-start',
+    paddingLeft: 20,
+  },
+  rightCard: {
+    flex: 1,
+    alignItems: 'flex-end',
+    paddingRight: 20,
+  },
+  icon: {
+    width: 60,
+    height: 60,
   },
 });

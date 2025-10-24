@@ -5,6 +5,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import { Text, TouchableOpacity } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -46,17 +48,29 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   return (
-     <ThemeProvider value={DarkTheme}>
+    <ThemeProvider value={DarkTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-         <Stack.Screen
+        <Stack.Screen
           name="favorites"
-          options={{
-            title: 'Favorites',
+          options={({ navigation }) => ({
+            title: '',
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 16 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Ionicons name="chevron-back" size={20} color="#ff6f00" />
+                <Text style={{ color: '#ff6f00', fontWeight: 'bold', marginLeft: 4 }}>
+                  Go back
+                </Text>
+              </TouchableOpacity>
+            ),
             headerStyle: { backgroundColor: '#1e1e1e' },
             headerTintColor: '#ff6f00',
             headerTitleStyle: { fontWeight: 'bold' },
-          }}
+          })}
         />
       </Stack>
 

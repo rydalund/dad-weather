@@ -22,14 +22,6 @@ import { useRouter } from 'expo-router';
 import DadJoke from '@/components/dadJoke';
 
 const BACKGROUND_COLOR = '#1e1e1e';
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight || 24;
-
-/*const mockedWeather = {
-  city: 'Växjö',
-  temperature: 10,
-  description: 'Broken clouds',
-  icon: '04d',
-};*/
 
 export default function Home() {
   //const [foo, setFoo] = useState(false); // For design test
@@ -39,32 +31,19 @@ export default function Home() {
   const [loadingLocation, setLoadingLocation] = useState(false);
   const router = useRouter();
 
-  //const hasLocation = location !== null;
-
-  /*const handleSearch = (city: string) => {
-    console.log('Search:', city);
-    setModalVisible(false);
-  };*/
-
   useEffect(() => {
     loadFavorites();
   }, []);
 
-
-  //For test
-  useEffect(() => {
-    console.log('Location updated:', location);
-  }, [location]);
-
   return (
-    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right', 'bottom']}>
       <View style={styles.container}>
         <HamburgerMenu />
         <StatusBar backgroundColor={BACKGROUND_COLOR} barStyle="light-content" />
 
         <View style={styles.headerContainer}>
           <Text style={styles.title}>DadWeather</Text>
-          <Text style={styles.tagline}>Serious forecasts, seriously dad jokes.</Text>
+          <Text style={styles.tagline}>Serious forecasts - serious dad jokes!</Text>
         </View>
 
         <View style={styles.content}>
@@ -144,8 +123,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    paddingTop: STATUSBAR_HEIGHT + 20,
-    marginTop: 20,
+    paddingTop: Platform.OS === 'ios' ? 20 : StatusBar.currentHeight || 24,
   },
   title: {
     fontSize: 36,
@@ -169,7 +147,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     paddingHorizontal: 20,
   },
   appImage: {

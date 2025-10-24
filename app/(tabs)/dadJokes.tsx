@@ -4,7 +4,6 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
-  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -71,7 +70,7 @@ export default function DadJokesScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Text style={styles.header}>Dad Jokes</Text>
 
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1e1e1e',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   center: {
     justifyContent: 'center',
