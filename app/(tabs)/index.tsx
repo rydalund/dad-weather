@@ -19,7 +19,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getUserLocation } from '@/utils/getUserLocation';
 import { useRouter } from 'expo-router';
-import DadJoke from '@/components/DadJoke';
+import DadJoke from '@/components/dadJoke';
 
 const BACKGROUND_COLOR = '#1e1e1e';
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight || 24;
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', 
     paddingHorizontal: 20,
   },
   appImage: {
