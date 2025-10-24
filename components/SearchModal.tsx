@@ -8,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import Constants from 'expo-constants';
 
@@ -72,6 +73,7 @@ export default function SearchModal({ visible, onClose, onSelectLocation }: Sear
   };
 
   const handleSelect = (item: any) => {
+     Keyboard.dismiss();
     onSelectLocation({
       name: item.name,
       country: item.country ?? 'N/A',
@@ -116,6 +118,7 @@ export default function SearchModal({ visible, onClose, onSelectLocation }: Sear
                 <Text style={styles.resultText}>{item.displayName}</Text>
               </Pressable>
             )}
+             keyboardShouldPersistTaps="handled" 
           />
 
           <View style={styles.buttonRow}>
