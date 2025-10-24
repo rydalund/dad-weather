@@ -3,6 +3,7 @@ import { useFavoritesStore } from '@/stores/useFavoritesStore';
 import { useLocationStore } from '@/stores/useLocationStore';
 import { useSettingsStore } from '@/stores/useSettingsStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
     Alert,
@@ -16,6 +17,7 @@ import {
 
 export default function HamburgerMenu() {
     const [visible, setVisible] = useState(false);
+    const router = useRouter(); 
     const unit = useSettingsStore(state => state.unit);
     const toggleUnit = useSettingsStore(state => state.toggleUnit);
     const clearFavorites = useFavoritesStore(state => state.clearFavorites);
@@ -32,6 +34,7 @@ export default function HamburgerMenu() {
                     onPress: () => {
                         clearFavorites();
                         setVisible(false);
+                        router.push('/');
                     },
                     style: 'destructive',
                 },
